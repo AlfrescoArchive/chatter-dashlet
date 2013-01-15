@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Chatter Feed</shortname>
+    <description>Display a user's Chatter Feed from Salesforce</description>
+    <url>/dashlets/chatter-feed</url>
+    <family>dashlet</family>
+</webscript>
