@@ -461,7 +461,7 @@
          // since it seems URL parameters specified on the return URL are not preserved.
           
          var returnUrl = window.location.protocol + "//" + window.location.host + 
-               Alfresco.constants.URL_SERVICECONTEXT + this.options.returnPage,
+               Alfresco.constants.URL_PAGECONTEXT + this.options.returnPage,
             authUri = this.options.loginUrl + 
                "/services/oauth2/authorize?response_type=code&client_id=" + 
                this.options.clientId + "&redirect_uri=" +
