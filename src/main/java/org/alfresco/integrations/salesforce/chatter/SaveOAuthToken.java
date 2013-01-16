@@ -5,7 +5,13 @@ import java.util.Date;
 
 import org.alfresco.service.cmr.oauth2.OAuth2CredentialsStoreService;
 import org.alfresco.service.cmr.remoteticket.NoSuchSystemException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.springframework.extensions.webscripts.AbstractWebScript;
+import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
@@ -16,6 +22,9 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
  */
 public class SaveOAuthToken extends AbstractWebScript
 {
+
+    private static Log logger = LogFactory.getLog(SaveOAuthToken.class);
+    
     // Services
     private OAuth2CredentialsStoreService    oauth2CredentialsStoreService;
     
@@ -28,20 +37,44 @@ public class SaveOAuthToken extends AbstractWebScript
     public void execute(WebScriptRequest req, WebScriptResponse arg1)
             throws IOException
     {
-        String remoteSystem = req.getParameter("name"), 
-                accessToken = req.getParameter("token"), 
-                refreshToken = req.getParameter("refreshToken");
-        
-        Date expiresIn = new Date(); // TODO pick this up from the request
+        String jsonStr = req.getContent().getContent();
+        if (logger.isDebugEnabled())
+        {
+            logger.debug("Got JSON data: " + jsonStr);
+        }
         
         try
         {
-            oauth2CredentialsStoreService.storePersonalOAuth2Credentials(remoteSystem, accessToken, refreshToken, expiresIn, new Date());
+            JSONObject reqJson = new JSONObject(new JSONTokener(jsonStr));
+
+            String remoteSystem = reqJson.getString("name"), 
+                    accessToken = reqJson.getString("token"), 
+                    refreshToken = reqJson.getString("refreshToken");
+            
+            if (logger.isDebugEnabled())
+            {
+                logger.debug("Name: " + remoteSystem);
+                logger.debug("Access token: " + accessToken);
+                logger.debug("Refresh token: " + refreshToken);
+            }
+            
+            Date expiresIn = null; // TODO need to pick an arbitrary date?
+            
+            try
+            {
+                oauth2CredentialsStoreService.storePersonalOAuth2Credentials(remoteSystem, accessToken, refreshToken, expiresIn, new Date());
+            }
+            catch (NoSuchSystemException nsse)
+            {
+                throw nsse;
+            }
+            
         }
-        catch (NoSuchSystemException nsse)
+        catch (JSONException e)
         {
-            throw nsse;
+            throw new WebScriptException("A problem occurred parsing the request JSON", e);
         }
+        
     }
 
 }
