@@ -28,7 +28,10 @@ function main()
    var dashlet = {
       id : "ChatterDashlet",
       name : "Alfresco.dashlet.ChatterFeed",
-      options: []
+      options: {
+         // TODO Need to get these values from the web tier config (same source as used by connector)
+         clientId: "3MVG9rFJvQRVOvk5W_CrNgQGmoMhFjPC9PwFpIjLhSg7NbTgFtylPj3On557sgBstlxXsG.Xr2wQqfNkdMfKy"
+      }
    };
    
    model.widgets = [dashlet, dashletResizer, dashletTitleBarActions];

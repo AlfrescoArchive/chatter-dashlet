@@ -91,7 +91,38 @@
           * @type string
           * @default "all"
           */
-         activeFilter: "all"
+         activeFilter: "all",
+         
+         /**
+          * Identifier used for storing the an OAuth 2.0 token in the repository personal credentials
+          * store.
+          * 
+          * @property providerId
+          * @type string
+          * @default "chatter"
+          */
+         providerId: "chatter",
+         
+         /**
+          * URI of the provider's authorization page. If an access token does not already exist then the
+          * user will be sent here in order to obtain one.
+          * 
+          * @property loginUrl
+          * @type string
+          * @default "https://login.salesforce.com"
+          */
+         loginUrl: "https://login.salesforce.com",
+         
+         /**
+          * OAuth client (application) ID
+          * 
+          * Must be included as a URL parameters when the user is sent to the provider's authorization page
+          * 
+          * @property clientId
+          * @type string
+          * @default ""
+          */
+         clientId: ""
       },
 
       /**
@@ -119,7 +150,7 @@
       {
          // Try to find a ticket
          // TODO make this a service
-         var tokenName = "chatter";
+         var tokenName = this.options.providerId;
          Alfresco.util.Ajax.jsonGet({
             url: Alfresco.constants.PROXY_URI + "oauth/token/" + tokenName + "?name=" + tokenName,
             successCallback: {
@@ -133,7 +164,6 @@
                fn: function onReady_getToken_failure(p_obj) {
                   if (p_obj.serverResponse.status == 404)
                   {
-                     alert("Ticket was not found");
                      Alfresco.util.createYUIButton(this, "connectButton", this.onConnectClick);
                   }
                   else
@@ -416,7 +446,19 @@
       
       onConnectClick: function ChatterFeed_onConnectClick(p_oEvent)
       {
-         alert("Conect clicked");
+         // TODO if this is a site dashboard we need to persist the location of the page we started from,
+         // since it seems URL parameters specified on the return URL are not preserved.
+          
+         var returnUrl = window.location.protocol + "//" + window.location.host + 
+               Alfresco.constants.URL_SERVICECONTEXT + "extras/oauth/auth2-return",
+            authUri = this.options.loginUrl + 
+               "/services/oauth2/authorize?response_type=code&client_id=" + 
+               this.options.clientId + "&redirect_uri=" +
+               encodeURIComponent(returnUrl);
+         
+         alert(authUri);
+         window.location = authUri;
+         
       },
 
       /**
