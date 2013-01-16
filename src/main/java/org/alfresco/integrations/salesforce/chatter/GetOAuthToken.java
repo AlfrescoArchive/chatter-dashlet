@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONStringer;
 import org.json.JSONWriter;
 import org.springframework.extensions.webscripts.AbstractWebScript;
+import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
@@ -41,24 +42,31 @@ public class GetOAuthToken extends AbstractWebScript
         
         OAuth2CredentialsInfo credentialInfo = oauth2CredentialsStoreService.getPersonalOAuth2Credentials(keyName);
         
-        try
+        if (credentialInfo != null)
         {
-            // Start object
-            JSONWriter jsonObj = new JSONStringer().object();
-            // Add string values
-            jsonObj.key("accessToken").value(credentialInfo.getOAuthAccessToken());
-            jsonObj.key("refreshToken").value(credentialInfo.getOAuthRefreshToken());
-            jsonObj.key("ticketExpiresAt").value(credentialInfo.getOAuthTicketExpiresAt());
-            jsonObj.key("ticketTokenIssuedAt").value(credentialInfo.getOAuthTicketIssuedAt());
-            // End object
-            jsonObj.endObject();
-            
-            // Write JSON to the response body
-            resp.getWriter().write(jsonObj.toString());
+            try
+            {
+                // Start object
+                JSONWriter jsonObj = new JSONStringer().object();
+                // Add string values
+                jsonObj.key("accessToken").value(credentialInfo.getOAuthAccessToken());
+                jsonObj.key("refreshToken").value(credentialInfo.getOAuthRefreshToken());
+                jsonObj.key("ticketExpiresAt").value(credentialInfo.getOAuthTicketExpiresAt());
+                jsonObj.key("ticketTokenIssuedAt").value(credentialInfo.getOAuthTicketIssuedAt());
+                // End object
+                jsonObj.endObject();
+                
+                // Write JSON to the response body
+                resp.getWriter().write(jsonObj.toString());
+            }
+            catch (JSONException e)
+            {
+                throw new WebScriptException("Error building JSON data", e);
+            }
         }
-        catch (JSONException e)
+        else
         {
-            throw new WebScriptException("Error building JSON data", e);
+            throw new WebScriptException(Status.STATUS_NOT_FOUND, "Could not find credentials with name " + keyName);
         }
     }
 
