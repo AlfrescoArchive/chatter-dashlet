@@ -168,7 +168,8 @@
             url: Alfresco.constants.PROXY_URI + "oauth/token/" + tokenName + "?name=" + tokenName,
             successCallback: {
                fn: function onReady_getToken_success(p_obj) {
-                  var token = p_obj.json.accessToken;
+                  this.token = p_obj.json.accessToken;
+                  this.loadFeed();
                },
                scope: this
             },
@@ -254,6 +255,123 @@
             }
          }
          */
+      },
+      
+      /**
+       * Load a feed from Chatter for display in the dashlet
+       * 
+       * @method loadFeed
+       */
+      loadFeed: function ChatterFeed_loadMessages()
+      {
+          // Token will be copied to Authorization header by the connector
+          // We cannot set the Authorization header directly because Share's proxy doesn't like it
+          YAHOO.util.Connect.initHeader("X-OAuth-Token", "OAuth " + this.token); 
+          // Get the feed from the server
+          Alfresco.util.Ajax.jsonGet({
+              url: Alfresco.constants.PROXY_URI.replace("/alfresco/", "/chatter/") + 
+                  "services/data/v26.0/chatter/feeds/news/me/feed-items",
+              dataObj: {
+              },
+              successCallback: {
+                  fn: this.renderFeed,
+                  scope: this
+              },
+              failureCallback: {
+                  fn: function() {
+                      // TODO try to re-authenticate in case of a 401
+                      Alfresco.util.PopupManager.displayMessage({
+                          text: this.msg("error.loadFeed")
+                      });
+                  },
+                  scope: this
+              },
+              noReloadOnAuthFailure: true
+          });
+          YAHOO.util.Connect.resetDefaultHeaders();
+      },
+      
+      /**
+       * Render the feed in the dashlet
+       * 
+       * @method renderFeed
+       */
+      renderFeed: function ChatterFeed_renderFeed(p_obj)
+      {
+         // Hide the existing content
+         //Dom.setStyle(this.id + "-feed", "display", "none");
+          var cEl = Dom.get(this.id + "-feed"),
+              data = p_obj.json;
+          
+          cEl.innerHTML = this._itemsHTML(data);
+      },
+      
+      /**
+       * Generate items markup
+       * 
+       * @method _itemsHTML
+       * @private
+       */
+      _itemsHTML: function ChatterFeed__itemsHTML(json)
+      {
+          var message, client, postedOn, url, postedLink, u, profileUri, mugshotUri, uname, html = "";
+          if (json.items)
+          {
+              for (var i = 0; i < json.items.length; i++)
+              {
+                  // TODO use messageSegments
+                  // TODO add actions
+                  
+                  message = json.items[i];
+                  postedOn = message.createdDate;
+                  client = message.clientInfo != null ? "<a href=\"" + message.clientInfo.applicationUrl + "\">" + message.clientInfo.applicationName + "</a>" : null;
+                  url = message.url;
+                  u = message.actor;
+                  profileUri = u ? u.url : null;
+                  mugshotUri = u && u.photo ? u.photo.smallPhotoUrl : null;
+                  uname = u ? u.name : null;
+                  userLink = "<a href=\"" + profileUri + "\" title=\"" + $html(uname) + "\" class=\"theme-color-1\">" + $html(uname) + "</a>";
+                  postedLink = "<a href=\"" + url + "\"><span class=\"chatter-item-date\" title=\"" + postedOn + "\">" + this._relativeTime(new Date(postedOn)) + "</span><\/a>";
+                  html += "<div class=\"chatter-item detail-list-item\">" + "<div class=\"chatter-item-hd\">" + 
+                      "<div class=\"user-icon\"><a href=\"" + profileUri + "\" title=\"" + $html(uname) + "\"><img src=\"" + $html(mugshotUri) + "\" alt=\"" + $html(uname) + "\" width=\"48\" height=\"48\" /></a></div>" + 
+                      "</div><div class=\"chatter-item-bd\">" + "<span class=\"screen-name\">" + userLink + "</span> " +
+                      this._formatMessage(message.body.text) + "</div>" + "<div class=\"chatter-item-postedOn\">" +  // or message.body.parsed?
+                      this.msg("text.msgDetails", postedLink, client) + "</div>" + "</div>";
+              }
+          }
+          return html;
+      },
+
+      /**
+       * Insert links into message text to highlight links
+       * 
+       * @method _formatMessage
+       * @private
+       * @param {string} text The plain message
+       * @return {string} The formatted text, with hyperlinks added
+       */
+      _formatMessage: function ChatterFeed__formatMessage(text)
+      {
+         var refsRe = /\[\[(\w+):(\w+)\]\]/gm;
+         function formatRef(str, p1, p2, offset, s)
+         {
+             return str;
+         };
+         text = text.replace(
+               /https?:\/\/\S+[^\s.]/gm, "<a href=\"$&\">$&</a>").replace(refsRe, formatRef);
+         return text;
+      },
+      
+      /**
+       * Get relative time where possible, otherwise just return a simple string representation of the supplied date
+       * 
+       * @method _relativeTime
+       * @private
+       * @param d {date} Date object
+       */
+      _relativeTime: function ChatterFeed__getRelativeTime(d)
+      {
+          return typeof(Alfresco.util.relativeTime) === "function" ? Alfresco.util.relativeTime(d) : Alfresco.util.formatDate(d)
       },
       
       /**

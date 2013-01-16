@@ -15,12 +15,13 @@
 <@markup id="html">
    <@uniqueIdDiv>
       <#assign id = args.htmlid>
-      <div class="dashlet chatter-feed-dashlet">
+      <div class="dashlet chatter-dashlet">
          <div class="title">${msg('dashlet.title')}</div>
-         <div class="body">
-            <div class="dashlet-padding" id="${id}-notConnected" class="notConnected">
+         <div class="body scrollableList">
+            <div id="${id}-connect" class="connect">
                <button id="${id}-connectButton" name="connectButton">${msg('button.connect')}</button>
             </div>
+            <div id="${id}-feed" class="chatter-feed"></div>
          </div>
       </div>
    </@uniqueIdDiv>

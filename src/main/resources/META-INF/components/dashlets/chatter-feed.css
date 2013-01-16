@@ -1,0 +1,50 @@
+/* 
+   Chatter Feed dashlet CSS
+*/
+.chatter-dashlet > .scrollableList
+{
+    padding-top: 0;
+}
+.chatter-dashlet div.detail-list-item
+{
+   min-height: 48px; /* No smaller that profile images */
+}
+.chatter-dashlet > .body div.chatter-feed
+{
+   padding-left: 0;
+   padding-right: 0;
+}
+.chatter-dashlet .connect {
+    text-align: center;
+    background-color: #FFFBDD;
+    border-bottom: 1px solid #DDD6A0;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.chatter-item {
+    padding-top: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+.chatter-item-bd
+{
+   padding-bottom: 0.2em;
+}
+.chatter-item-bd,
+.chatter-item-postedOn
+{
+    margin-left: 56px;
+}
+.chatter-item div.chatter-item-postedOn,
+.chatter-item div.chatter-item-postedOn a,
+.chatter-item div.chatter-item-postedOn a:link,
+.chatter-item div.chatter-item-postedOn a:hover,
+.chatter-item div.chatter-item-postedOn a:visited
+{
+   color: #999999;
+}
+.chatter-dashlet .user-icon
+{
+   float: left;
+}
