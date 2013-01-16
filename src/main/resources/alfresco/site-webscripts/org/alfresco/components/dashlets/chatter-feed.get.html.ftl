@@ -18,6 +18,9 @@
       <div class="dashlet chatter-feed-dashlet">
          <div class="title">Chatter Feed Dashlet</div>
          <div class="body">
+            <div class="dashlet-padding" id="${id}-notConnected" class="notConnected">
+               <button id="${id}-connectButton" name="connectButton" value="${msg('button.connect')}" />
+            </div>
          </div>
       </div>
    </@uniqueIdDiv>

@@ -134,6 +134,7 @@
                   if (p_obj.serverResponse.status == 404)
                   {
                      alert("Ticket was not found");
+                     Alfresco.util.createYUIButton(this, "connectButton", this.onConnectClick);
                   }
                   else
                   {
@@ -412,6 +413,11 @@
        * YUI WIDGET EVENT HANDLERS
        * Handlers for standard events fired from YUI widgets, e.g. "click"
        */
+      
+      onConnectClick: function ChatterFeed_onConnectClick(p_oEvent)
+      {
+         alert("Conect clicked");
+      },
 
       /**
        * All tasks
@@ -419,7 +425,7 @@
        * @param p_oEvent {object} Button event
        * @param p_obj {object} Button
        */
-      onAllCheckedChanged: function Sitetags_onAllCheckedChanged(p_oEvent, p_obj)
+      onAllCheckedChanged: function ChatterFeed_onAllCheckedChanged(p_oEvent, p_obj)
       {
          this.setActiveFilter("all");
          p_obj.set("checked", true, true);
