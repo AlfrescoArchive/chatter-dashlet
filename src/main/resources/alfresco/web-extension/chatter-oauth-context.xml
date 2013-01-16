@@ -8,7 +8,7 @@
             <ref bean="webscripts.script.remote" />
         </property>
         <property name="connectorId" value="chatter-oauth" />
-        <property name="endpointId" value="chatter" />
+        <property name="endpointId" value="chatter-oauth" />
         <property name="providerId" value="chatter" />
     </bean>
    
