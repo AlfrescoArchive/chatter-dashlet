@@ -133,7 +133,9 @@
           * @type string
           * @default "integrations/salesforce/chatter-return"
           */
-         returnPage: "integrations/salesforce/chatter-return"
+         returnPage: "integrations/salesforce/chatter-return",
+         
+         baseUrl: "https://na14.salesforce.com"
       },
 
       /**
@@ -314,7 +316,7 @@
        */
       _itemsHTML: function ChatterFeed__itemsHTML(json)
       {
-          var message, client, postedOn, url, postedLink, u, profileUri, mugshotUri, uname, html = "";
+          var message, client, postedOn, postedLink, u, profileUri, mugshotUri, uname, html = "";
           if (json.items)
           {
               for (var i = 0; i < json.items.length; i++)
@@ -323,20 +325,16 @@
                   // TODO add actions
                   
                   message = json.items[i];
-                  postedOn = message.createdDate;
-                  client = message.clientInfo != null ? "<a href=\"" + message.clientInfo.applicationUrl + "\">" + message.clientInfo.applicationName + "</a>" : null;
-                  url = message.url;
                   u = message.actor;
                   profileUri = u ? u.url : null;
                   mugshotUri = u && u.photo ? u.photo.smallPhotoUrl : null;
                   uname = u ? u.name : null;
                   userLink = "<a href=\"" + profileUri + "\" title=\"" + $html(uname) + "\" class=\"theme-color-1\">" + $html(uname) + "</a>";
-                  postedLink = "<a href=\"" + url + "\"><span class=\"chatter-item-date\" title=\"" + postedOn + "\">" + this._relativeTime(new Date(postedOn)) + "</span><\/a>";
                   html += "<div class=\"chatter-item detail-list-item\">" + "<div class=\"chatter-item-hd\">" + 
                       "<div class=\"user-icon\"><a href=\"" + profileUri + "\" title=\"" + $html(uname) + "\"><img src=\"" + $html(mugshotUri) + "\" alt=\"" + $html(uname) + "\" width=\"48\" height=\"48\" /></a></div>" + 
                       "</div><div class=\"chatter-item-bd\">" + "<span class=\"screen-name\">" + userLink + "</span> " +
                       this._formatMessage(message.body.text) + "</div>" + "<div class=\"chatter-item-postedOn\">" +  // or message.body.parsed?
-                      this.msg("text.msgDetails", postedLink, client) + "</div>" + "</div>";
+                      this._formatMeta(message) + "</div>" + "</div>";
               }
           }
           return html;
@@ -371,7 +369,38 @@
        */
       _relativeTime: function ChatterFeed__getRelativeTime(d)
       {
-          return typeof(Alfresco.util.relativeTime) === "function" ? Alfresco.util.relativeTime(d) : Alfresco.util.formatDate(d)
+          return typeof(Alfresco.util.relativeTime) === "function" ? Alfresco.util.relativeTime(d) : Alfresco.util.formatDate(d);
+      },
+      
+      /**
+       * Format the item metadata displayed underneath the text
+       * 
+       * @method _formatMeta
+       * @private
+       * @param item {object} Item object
+       */
+      _formatMeta: function ChatterFeed__formatMeta(item)
+      {
+          var postedOn = item.createdDate,
+              clientInfo = item.clientInfo,
+              url = this.options.baseUrl + item.url,
+              clientLink = null;
+          
+          if (clientInfo && clientInfo.applicationName)
+          {
+              if (clientInfo.applicationUrl && clientInfo.applicationUrl != "null")
+              {
+                  clientLink = "<a href=\"" + clientInfo.applicationUrl + "\">" + clientInfo.applicationName + "</a>";
+              }
+              else
+              {
+                  clientLink = clientInfo.applicationName;
+              }
+          }
+          
+          var postedLink = "<a href=\"" + url + "\"><span class=\"chatter-item-date\" title=\"" + postedOn + "\">" + this._relativeTime(new Date(postedOn)) + "</span><\/a>";
+          
+          return clientLink ? this.msg("text.msgFullDetails", postedLink, clientLink) : this.msg("text.msgDetails", postedLink, clientLink);
       },
       
       /**
