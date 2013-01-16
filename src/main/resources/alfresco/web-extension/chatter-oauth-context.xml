@@ -7,9 +7,14 @@
         <property name="scriptRemote">
             <ref bean="webscripts.script.remote" />
         </property>
+        <!--
         <property name="connectorId" value="chatter-oauth" />
         <property name="endpointId" value="chatter-oauth" />
+         -->
         <property name="providerId" value="chatter" />
+        <property name="clientId" value="3MVG9rFJvQRVOvk5W_CrNgQGmoMhFjPC9PwFpIjLhSg7NbTgFtylPj3On557sgBstlxXsG.Xr2wQqfNkdMfKy" />
+        <property name="clientSecret" value="914216775528343297" />
+        <property name="accessTokenUrl" value ="http://login.salesforce.com/services/oauth2/token" />
     </bean>
    
 </beans>
