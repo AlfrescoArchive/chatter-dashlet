@@ -117,6 +117,32 @@
        */
       onReady: function ChatterFeed_onReady()
       {
+         // Try to find a ticket
+         // TODO make this a service
+         var tokenName = "chatter";
+         Alfresco.util.Ajax.jsonGet({
+            url: Alfresco.constants.PROXY_URI + "oauth/token/" + tokenName + "?name=" + tokenName,
+            successCallback: {
+               fn: function onReady_getToken_success(p_obj) {
+                  var token = p_obj.json.accessToken;
+                  alert(token);
+               },
+               scope: this
+            },
+            failureCallback: {
+               fn: function onReady_getToken_failure(p_obj) {
+                  if (p_obj.serverResponse.status == 404)
+                  {
+                     alert("Ticket was not found");
+                  }
+                  else
+                  {
+                     alert("An unknown error occurred while fetching the user ticket");
+                  }
+               },
+               scope: this
+            }
+         });
           /*
          var me = this;
          
