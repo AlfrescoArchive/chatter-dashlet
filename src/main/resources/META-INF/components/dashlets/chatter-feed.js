@@ -159,6 +159,8 @@
        */
       onReady: function ChatterFeed_onReady()
       {
+         Alfresco.util.createYUIButton(this, "connectButton", this.onConnectClick);
+          
          // Try to find a ticket
          // TODO make this a service
          var tokenName = this.options.providerId;
@@ -167,7 +169,6 @@
             successCallback: {
                fn: function onReady_getToken_success(p_obj) {
                   var token = p_obj.json.accessToken;
-                  alert(token);
                },
                scope: this
             },
@@ -175,7 +176,6 @@
                fn: function onReady_getToken_failure(p_obj) {
                   if (p_obj.serverResponse.status == 404)
                   {
-                     Alfresco.util.createYUIButton(this, "connectButton", this.onConnectClick);
                   }
                   else
                   {
@@ -467,7 +467,6 @@
                this.options.clientId + "&redirect_uri=" +
                encodeURIComponent(returnUrl);
          
-         alert(authUri);
          window.location = authUri;
          
       },
