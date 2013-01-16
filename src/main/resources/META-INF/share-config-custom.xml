@@ -11,6 +11,7 @@
             <class>org.sharextras.webscripts.connector.HttpOAuth2Connector</class>
             <client-id>3MVG9rFJvQRVOvk5W_CrNgQGmoMhFjPC9PwFpIjLhSg7NbTgFtylPj3On557sgBstlxXsG.Xr2wQqfNkdMfKy</client-id>
             <client-secret>914216775528343297</client-secret>
+            <access-token-path>/services/oauth2/token</access-token-path>
         </connector>
       
         <!-- Endpoints -->
@@ -19,6 +20,7 @@
           <name>Chatter Remote API (for obtaining an access token)</name>
           <connector-id>chatter-oauth</connector-id>
           <endpoint-url>https://na14.salesforce.com</endpoint-url>
+          <access-token-path>/services/oauth2/token</access-token-path>
         </endpoint>
         <endpoint>
           <id>chatter</id>
