@@ -450,7 +450,7 @@
          // since it seems URL parameters specified on the return URL are not preserved.
           
          var returnUrl = window.location.protocol + "//" + window.location.host + 
-               Alfresco.constants.URL_SERVICECONTEXT + "extras/oauth/auth2-return",
+               Alfresco.constants.URL_SERVICECONTEXT + "integrations/salesforce/chatter-return",
             authUri = this.options.loginUrl + 
                "/services/oauth2/authorize?response_type=code&client_id=" + 
                this.options.clientId + "&redirect_uri=" +
