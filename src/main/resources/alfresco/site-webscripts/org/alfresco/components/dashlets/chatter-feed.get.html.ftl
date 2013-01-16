@@ -17,7 +17,7 @@
       <#assign id = args.htmlid>
       <div class="dashlet chatter-dashlet">
          <div class="title">${msg('dashlet.title')}</div>
-         <div class="body scrollableList">
+         <div class="body scrollableList" <#if args.height??>style="height: ${args.height}px;"</#if>>
             <div id="${id}-connect" class="connect">
                <button id="${id}-connectButton" name="connectButton">${msg('button.connect')}</button>
             </div>
