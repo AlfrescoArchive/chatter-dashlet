@@ -42,4 +42,30 @@
         
       </remote>
     </config>
+   
+   <config evaluator="string-compare" condition="DocLibCustom">   
+      <dependencies>
+         <js src="/components/documentlibrary/actions/chatter-actions.js" />   
+      </dependencies> 
+   </config>
+    
+    <config evaluator="string-compare" condition="DocLibActions">
+      <actions>
+         <action id="document-post-to-chatter" type="javascript" label="actions.post-to-chatter" icon="salesforce-chatter">
+            <param name="function">onActionPostToChatter</param>
+         </action>
+      </actions>
+   </config>
+   
+   <config evaluator="string-compare" condition="DocLibActions">
+      <actionGroups>
+         <actionGroup id="document-browse">
+            <action index="999" id="document-post-to-chatter" />
+         </actionGroup>
+         <actionGroup id="document-details">
+            <action index="999" id="document-post-to-chatter" />
+         </actionGroup>
+      </actionGroups>
+   </config>
+   
 </alfresco-config>

@@ -16,5 +16,14 @@
         <property name="clientSecret" value="914216775528343297" />
         <property name="accessTokenUrl" value ="http://login.salesforce.com/services/oauth2/token" />
     </bean>
+    
+   <!-- Custom WebScript Messages - add slingshot application messages -->
+   <bean id="webscripts.resources.chatter-action" class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
+      <property name="resourceBundles">
+         <list>
+            <value>alfresco.messages.slingshot-custom-chatter-action</value>
+         </list>
+      </property>
+   </bean>
    
 </beans>
