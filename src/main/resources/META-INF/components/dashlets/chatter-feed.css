@@ -21,7 +21,9 @@
     padding-top: 8px;
     padding-bottom: 8px;
 }
-
+.chatter-dashlet .connect div {
+    margin-bottom: 1em;
+}
 .chatter-item {
     padding-top: 8px;
     padding-left: 8px;
