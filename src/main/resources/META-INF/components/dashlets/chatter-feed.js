@@ -626,10 +626,13 @@
           
          var returnUrl = window.location.protocol + "//" + window.location.host + 
                Alfresco.constants.URL_PAGECONTEXT + this.options.returnPage,
+            pageUrl = window.location.pathname.replace(Alfresco.constants.URL_CONTEXT, ""),
+            state = "rp=" + encodeURIComponent(pageUrl),
             authUri = this.options.loginUrl + 
                "/services/oauth2/authorize?response_type=code&client_id=" + 
                this.options.clientId + "&redirect_uri=" +
-               encodeURIComponent(returnUrl);
+               encodeURIComponent(returnUrl) + "&state=" + 
+               encodeURIComponent(state);
          
          window.location = authUri;
          
