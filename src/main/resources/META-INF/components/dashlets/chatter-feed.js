@@ -344,17 +344,23 @@
                   message = json.items[i];
                   u = message.actor;
                   profileUri = u ? u.url : null;
-                  mugshotUri = u && u.photo ? u.photo.smallPhotoUrl : null;
+                  mugshotUri = u && u.photo ? u.photo.smallPhotoUrl + "?oauth_token=" + this.token : null;
                   uname = u ? u.name : null;
-                  userLink = "<a href=\"" + profileUri + "\" title=\"" + $html(uname) + "\" class=\"theme-color-1\">" + $html(uname) + "</a>";
+                  userLink = "<a href=\"" + this._webUrl(profileUri) + "\" title=\"" + $html(uname) + "\" class=\"theme-color-1\">" + $html(uname) + "</a>";
                   html += "<div class=\"chatter-item detail-list-item\">" + "<div class=\"chatter-item-hd\">" + 
-                      "<div class=\"user-icon\"><a href=\"" + profileUri + "\" title=\"" + $html(uname) + "\"><img src=\"" + $html(mugshotUri) + "\" alt=\"" + $html(uname) + "\" width=\"48\" height=\"48\" /></a></div>" + 
+                      "<div class=\"user-icon\"><a href=\"" + this._webUrl(profileUri) + "\" title=\"" + $html(uname) + "\"><img src=\"" + $html(mugshotUri) + "\" alt=\"" + $html(uname) + "\" width=\"48\" height=\"48\" /></a></div>" + 
                       "</div><div class=\"chatter-item-bd\">" + "<span class=\"screen-name\">" + userLink + "</span> " +
-                      this._formatMessage(message.body.text) + "</div>" + "<div class=\"chatter-item-postedOn\">" +  // or message.body.parsed?
+                      this._formatMessage(message.body) + "</div>" + "<div class=\"chatter-item-postedOn\">" +  // or message.body.parsed?
                       this._formatMeta(message) + "</div>" + "</div>";
               }
           }
           return html;
+      },
+      
+      _webUrl: function ChatterFeed__webUrl(url)
+      {
+          var id = url.substring(url.lastIndexOf("/"));
+          return this.options.baseUrl + id;
       },
 
       /**
@@ -365,16 +371,30 @@
        * @param {string} text The plain message
        * @return {string} The formatted text, with hyperlinks added
        */
-      _formatMessage: function ChatterFeed__formatMessage(text)
+      _formatMessage: function ChatterFeed__formatMessage(body)
       {
-         var refsRe = /\[\[(\w+):(\w+)\]\]/gm;
-         function formatRef(str, p1, p2, offset, s)
+         var text = body.text, segments = body.messageSegments;
+         if (segments)
          {
-             return str;
-         };
-         text = text.replace(
-               /https?:\/\/\S+[^\s.]/gm, "<a href=\"$&\">$&</a>").replace(refsRe, formatRef);
-         return text;
+             text = "";
+             for (var i = 0, seg; i < segments.length; i++)
+             {
+                seg = segments[i];
+                if (seg.type == "Text")
+                {
+                    text += seg.text;
+                }
+                else if (seg.type == "EntityLink")
+                {
+                    text += "<a href=\"" + this._webUrl(seg.reference.url) + "\">" + seg.text + "</a>";
+                }
+             }
+             return text;
+         }
+         else
+         {
+             return text;
+         }
       },
       
       /**
@@ -400,7 +420,7 @@
       {
           var postedOn = item.createdDate,
               clientInfo = item.clientInfo,
-              url = this.options.baseUrl + item.url,
+              url = this._webUrl(item.url),
               clientLink = null;
           
           if (clientInfo && clientInfo.applicationName)
