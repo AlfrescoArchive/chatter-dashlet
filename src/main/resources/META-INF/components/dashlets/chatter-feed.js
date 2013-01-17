@@ -161,10 +161,14 @@
        */
       onReady: function ChatterFeed_onReady()
       {
+         // Connect to Chatter button
          Alfresco.util.createYUIButton(this, "connectButton", this.onConnectClick);
          
+         // Set up the new post link
+         Event.addListener(this.id + "-newPost", "click", this.onNewPostClick, this, true);
+         
          // Try to find a ticket
-         // TODO make this a service
+         // TODO make this a service?
          var tokenName = this.options.providerId;
          Alfresco.util.Ajax.jsonGet({
             url: Alfresco.constants.PROXY_URI + "oauth/token/" + tokenName + "?name=" + tokenName,
@@ -267,15 +271,10 @@
        */
       loadFeed: function ChatterFeed_loadMessages()
       {
-          // Token will be copied to Authorization header by the connector
-          // We cannot set the Authorization header directly because Share's proxy doesn't like it
-          YAHOO.util.Connect.initHeader("X-OAuth-Token", "OAuth " + this.token); 
           // Get the feed from the server
-          Alfresco.util.Ajax.jsonGet({
+          this._request({
               url: Alfresco.constants.PROXY_URI.replace("/alfresco/", "/chatter/") + 
                   "services/data/v26.0/chatter/feeds/news/me/feed-items",
-              dataObj: {
-              },
               successCallback: {
                   fn: this.renderFeed,
                   scope: this
@@ -295,7 +294,24 @@
                       }
                   },
                   scope: this
-              },
+              }
+          });
+      },
+      
+      /**
+       * Perform an API request against the Chatter API
+       */
+      _request: function ChatterFeed__request(config)
+      {
+          // Token will be copied to Authorization header by the connector
+          // We cannot set the Authorization header directly because Share's proxy doesn't like it
+          YAHOO.util.Connect.initHeader("X-OAuth-Token", "OAuth " + this.token); 
+          Alfresco.util.Ajax.jsonRequest({
+              url: config.url,
+              method: config.method || "GET",
+              dataObj: config.dataObj || {},
+              successCallback: config.successCallback,
+              failureCallback: config.failureCallback,
               noReloadOnAuthFailure: true
           });
           YAHOO.util.Connect.resetDefaultHeaders();
@@ -317,8 +333,9 @@
        */
       renderFeed: function ChatterFeed_renderFeed(p_obj)
       {
-         // Hide the existing content
-         //Dom.setStyle(this.id + "-feed", "display", "none");
+          // Show the toolbar
+          Dom.setStyle(this.id + "-toolbar", "display", "block");
+          
           var cEl = Dom.get(this.id + "-feed"),
               data = p_obj.json;
           
@@ -438,6 +455,26 @@
           var postedLink = "<a href=\"" + url + "\"><span class=\"chatter-item-date\" title=\"" + postedOn + "\">" + this._relativeTime(new Date(postedOn)) + "</span><\/a>";
           
           return clientLink ? this.msg("text.msgFullDetails", postedLink, clientLink) : this.msg("text.msgDetails", postedLink, clientLink);
+      },
+      
+      /**
+       * Append additional news items
+       * 
+       * @method appendMessages
+       */
+      appendMessages: function ChatterFeed_appendMessages(json)
+      {
+          Dom.get(this.id + "-feed").innerHTML += this._itemsHTML(json);
+      },
+      
+      /**
+       * Prepend additional news items
+       * 
+       * @method prependMessages
+       */
+      prependMessages: function ChatterFeed_prependMessages(json)
+      {
+          Dom.get(this.id + "-feed").innerHTML = this._itemsHTML(json) + Dom.get(this.id + "-feed").innerHTML;
       },
       
       /**
@@ -633,12 +670,111 @@
             this.services.preferences.set(PREF_SITE_TAGS_FILTER, filter);
          }
       },
+      
+      /**
+       * Post a message
+       *
+       * @method _postMessage
+       * @param replyToId {int} ID of message this is in reply to, null otherwise
+       * @param titleId {int} Message ID to use for title text (optional)
+       * @param promptId {int} Message ID to use for prompt text (optional)
+       */
+      _postMessage: function ChatterFeed__postMessage(replyToId, titleId, promptId)
+      {
+         titleId = titleId || this.msg("label.new-post");
+         promptId = promptId || this.msg("label.new-post-prompt");
+         Alfresco.util.PopupManager.getUserInput({
+             title: this.msg(titleId),
+             text: this.msg(promptId),
+             callback:
+             {
+                 fn: function Chatter_onNewPostClick_postCB(value, obj) {
+                     if (value != null && value != "")
+                     {
+                         var dataObj = {
+                             body: {
+                                 messageSegments: [{
+                                     type: "Text",
+                                     text: value
+                                 }]
+                             }
+                         };
+                         if (replyToId)
+                             dataObj.replied_to_id = replyToId;
+                         
+                         // Post the update
+                         this._request({
+                             url: Alfresco.constants.PROXY_URI.replace("/alfresco/", "/chatter/") + 
+                                 "services/data/v26.0/chatter/feeds/news/me/feed-items",
+                             method: "POST",
+                             dataObj: dataObj,
+                             //requestContentType: Alfresco.util.Ajax.FORM,
+                             successCallback: {
+                                 fn: function(o) {
+                                     if (o.responseText == "")
+                                     {
+                                         Alfresco.util.PopupManager.displayMessage({
+                                             text: this.msg("error.post-empty-resp")
+                                         });
+                                     }
+                                     else
+                                     {
+                                         if (typeof o.json == "object")
+                                         {
+                                             this.prependMessages({
+                                                 items: [o.json]
+                                             });
+                                         }
+                                         else
+                                         {
+                                             Alfresco.util.PopupManager.displayMessage({
+                                                 text: this.msg("error.post-bad-resp-type")
+                                             });
+                                         }
+                                     }
+                                 },
+                                 scope: this
+                             },
+                             failureCallback: {
+                                 fn: function() {
+                                     Alfresco.util.PopupManager.displayMessage({
+                                         text: this.msg("error.post-message")
+                                     });
+                                 },
+                                 scope: this
+                             }
+                         });
+                     }
+                 },
+                 scope: this
+             }
+         });
+      },
 
       /**
        * YUI WIDGET EVENT HANDLERS
        * Handlers for standard events fired from YUI widgets, e.g. "click"
        */
       
+      /**
+       * Click handler for New Post link
+       *
+       * @method onNewPostClick
+       * @param e {object} HTML event
+       */
+      onNewPostClick: function ChatterFeed_onNewPostClick(e, obj)
+      {
+         // Prevent default action
+         Event.stopEvent(e);
+         this._postMessage(null);
+      },
+      
+      /**
+       * Click handler for Connect to Chatter button clicked
+       * 
+       * @method onConnectClick
+       * @param p_oEvent {object} HTML event
+       */
       onConnectClick: function ChatterFeed_onConnectClick(p_oEvent)
       {
          // TODO if this is a site dashboard we need to persist the location of the page we started from,

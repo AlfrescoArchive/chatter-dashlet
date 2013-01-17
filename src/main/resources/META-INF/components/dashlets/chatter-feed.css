@@ -14,6 +14,9 @@
    padding-left: 0;
    padding-right: 0;
 }
+.chatter-dashlet .toolbar {
+    display: none;
+}
 .chatter-dashlet .connect {
 	display: none;
     text-align: center;

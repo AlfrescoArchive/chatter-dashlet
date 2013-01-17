@@ -17,6 +17,17 @@
       <#assign id = args.htmlid>
       <div class="dashlet chatter-dashlet">
          <div class="title">${msg('dashlet.title')}</div>
+         <div id="${id}-toolbar" class="toolbar flat-button">
+            <div>
+               <span class="align-right yui-button-align">
+                  <span class="first-child">
+                     <a id="${id}-newPost" href="#" class="theme-color-1">
+                        <img src="${url.context}/res/components/images/edit-16.png" style="vertical-align: text-bottom" width="16" />
+                        ${msg("link.addPost")}</a>
+                  </span>
+               </span>
+            </div>
+         </div>
          <div class="body scrollableList" <#if args.height??>style="height: ${args.height}px;"</#if>>
             <div id="${id}-connect" class="connect">
                <div>${msg('message.notConnected')}</div>
