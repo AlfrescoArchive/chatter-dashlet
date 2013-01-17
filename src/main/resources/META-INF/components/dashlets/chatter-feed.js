@@ -405,6 +405,10 @@
                 {
                     text += "<a href=\"" + this._webUrl(seg.reference.url) + "\">" + seg.text + "</a>";
                 }
+                else if (seg.type == "Link")
+                {
+                    text += "<a href=\"" + seg.url + "\">" + seg.text + "</a>";
+                }
              }
              return text;
          }
