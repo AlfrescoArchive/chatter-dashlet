@@ -20,7 +20,7 @@
          <div class="body scrollableList" <#if args.height??>style="height: ${args.height}px;"</#if>>
             <div id="${id}-connect" class="connect">
                <div>${msg('message.notConnected')}</div>
-               <button id="${id}-connectButton" name="connectButton">${msg('button.connect')}</button>
+               <button id="${id}-connectButton" name="connectButton" disabled="disabled">${msg('button.connect')}</button>
             </div>
             <div id="${id}-feed" class="chatter-feed"></div>
          </div>
