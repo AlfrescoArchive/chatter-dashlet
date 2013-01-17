@@ -15,6 +15,7 @@
    padding-right: 0;
 }
 .chatter-dashlet .connect {
+	display: none;
     text-align: center;
     background-color: #FFFBDD;
     border-bottom: 1px solid #DDD6A0;

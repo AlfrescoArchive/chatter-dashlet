@@ -179,6 +179,7 @@
                fn: function onReady_getToken_failure(p_obj) {
                   if (p_obj.serverResponse.status == 404)
                   {
+                      this.showConnect();
                   }
                   else
                   {
@@ -280,17 +281,32 @@
                   scope: this
               },
               failureCallback: {
-                  fn: function() {
-                      // TODO try to re-authenticate in case of a 401
-                      Alfresco.util.PopupManager.displayMessage({
-                          text: this.msg("error.loadFeed")
-                      });
+                  fn: function(p_obj) {
+                      // Need to re-authenticate in case of a 401
+                      if (p_obj.serverResponse.status == 401)
+                      {
+                          this.showConnect();
+                      }
+                      else
+                      {
+                          Alfresco.util.PopupManager.displayMessage({
+                              text: this.msg("error.loadFeed")
+                          });
+                      }
                   },
                   scope: this
               },
               noReloadOnAuthFailure: true
           });
           YAHOO.util.Connect.resetDefaultHeaders();
+      },
+      
+      /**
+       * Show the Connect to Chatter button at the top of the dashlet
+       */
+      showConnect: function ChatterFeed_showConnect()
+      {
+          Dom.setStyle(this.id + "-connect", "display", "block");
       },
       
       /**
