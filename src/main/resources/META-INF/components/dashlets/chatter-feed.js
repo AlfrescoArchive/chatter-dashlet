@@ -162,7 +162,7 @@
       onReady: function ChatterFeed_onReady()
       {
          Alfresco.util.createYUIButton(this, "connectButton", this.onConnectClick);
-          
+         
          // Try to find a ticket
          // TODO make this a service
          var tokenName = this.options.providerId;
@@ -307,6 +307,7 @@
       showConnect: function ChatterFeed_showConnect()
       {
           Dom.setStyle(this.id + "-connect", "display", "block");
+          Alfresco.util.Anim.fadeIn(this.id + "-connect", {});
       },
       
       /**
