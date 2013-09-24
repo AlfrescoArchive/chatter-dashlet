@@ -101,7 +101,7 @@
           * @type string
           * @default "chatter"
           */
-         providerId: "chatter",
+         providerId: "chatter-oauth",
          
          /**
           * URI of the provider's authorization page. If an access token does not already exist then the
@@ -135,7 +135,7 @@
           */
          returnPage: "integrations/salesforce/chatter-return",
          
-         baseUrl: "https://na14.salesforce.com"
+         baseUrl: "https://eu2.salesforce.com"
       },
 
       /**
@@ -169,7 +169,7 @@
          
          // Try to find a ticket
          // TODO make this a service?
-         var tokenName = this.options.providerId;
+         var tokenName = "credentials_" + this.options.providerId;
          Alfresco.util.Ajax.jsonGet({
             url: Alfresco.constants.PROXY_URI + "oauth/token/" + tokenName + "?name=" + tokenName,
             successCallback: {

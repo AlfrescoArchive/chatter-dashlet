@@ -3,6 +3,12 @@
     <config evaluator="string-compare" condition="Remote">
       <remote>
         
+        <!--
+            OLD METHOD - Uses a custom connector to exchange the token for an access code. Subsequent requests are proxied
+            straight through, passing the token from the client. The connector connects back to the repo directly to store
+            the token (yuk), before returning to the client.
+        -->
+        
         <!-- Connector instances -->
         <!-- 
         <connector>
@@ -15,13 +21,6 @@
         </connector>
         -->
         
-        <connector>
-            <id>chatter-oauth-proxy</id>
-            <name>OAuth Authentication Proxy Connector</name>
-            <description>HTTP Connector which will populate the Authorization header</description>
-            <class>org.sharextras.webscripts.connector.AuthorizationPassthruConnector</class>
-        </connector>
-        
         <!-- Endpoints -->
         <!--
         <endpoint>
@@ -33,11 +32,19 @@
         </endpoint>
         -->
         
+        <!--
+            NEW METHOD - Access token exchange is now performed by the OAuth2Return web script, which uses
+            a credential store to persist the access token into the user's OAuth token store.
+            
+            Still requires that the client code provides a X-OAuth-Token header value with each request.
+            
+            TODO Provide an authenticator which will look up the tokens from the store and add to the request.
+        -->
         <endpoint>
           <id>chatter</id>
           <name>Chatter REST API</name>
-          <connector-id>chatter-oauth-proxy</connector-id>
-          <endpoint-url>https://na14.salesforce.com</endpoint-url>
+          <connector-id>oauth-token-passthru</connector-id>
+          <endpoint-url>https://eu2.salesforce.com</endpoint-url>
         </endpoint>
         
       </remote>
