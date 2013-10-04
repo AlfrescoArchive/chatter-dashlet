@@ -29,7 +29,7 @@ The build will produce two separate artitacts which must be installed into your 
 TODO
 ----
 
-* Move repo-tier components into the Share Extras project
+* Move repo-tier components into the Share OAuth project
 * Improvements to Maven build to use Maven SDK and depend on Share OAuth
 * Request refresh tokens from Salesforce, so that expired access tokens can be renewed
 * Improvements to Share OAuth to avoid having to load access tokens in client-side code
