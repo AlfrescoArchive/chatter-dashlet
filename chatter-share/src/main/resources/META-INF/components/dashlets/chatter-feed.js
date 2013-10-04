@@ -97,11 +97,11 @@
           * Identifier used for storing the an OAuth 2.0 token in the repository personal credentials
           * store.
           * 
-          * @property providerId
+          * @property endpointId
           * @type string
           * @default "chatter"
           */
-         providerId: "chatter-oauth",
+         endpointId: "chatter-oauth",
          
          /**
           * URI of the provider's authorization page. If an access token does not already exist then the
@@ -169,7 +169,7 @@
          
          // Try to find a ticket
          // TODO make this a service?
-         var tokenName = "credentials_" + this.options.providerId;
+         var tokenName = "credentials_" + this.options.endpointId;
          Alfresco.util.Ajax.jsonGet({
             url: Alfresco.constants.PROXY_URI + "oauth/token/" + tokenName + "?name=" + tokenName,
             successCallback: {
@@ -273,7 +273,7 @@
       {
           // Get the feed from the server
           this._request({
-              url: Alfresco.constants.PROXY_URI.replace("/alfresco/", "/chatter/") + 
+              url: Alfresco.constants.PROXY_URI.replace("/alfresco/", "/" + this.options.endpointId +"/") + 
                   "services/data/v26.0/chatter/feeds/news/me/feed-items",
               successCallback: {
                   fn: this.renderFeed,
@@ -708,7 +708,7 @@
                          
                          // Post the update
                          this._request({
-                             url: Alfresco.constants.PROXY_URI.replace("/alfresco/", "/chatter/") + 
+                             url: Alfresco.constants.PROXY_URI.replace("/alfresco/", "/" + this.options.endpointId +"/") + 
                                  "services/data/v26.0/chatter/feeds/news/me/feed-items",
                              method: "POST",
                              dataObj: dataObj,
