@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONStringer;
 import org.json.JSONWriter;
 import org.springframework.extensions.webscripts.AbstractWebScript;
+import org.springframework.extensions.webscripts.Format;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
@@ -33,7 +34,7 @@ public class GetOAuthToken extends AbstractWebScript
     public void execute(WebScriptRequest req, WebScriptResponse resp)
             throws IOException
     {
-        String keyName = req.getParameter("name");
+        String keyName = req.getServiceMatch().getTemplateVars().get("name");
         
         if (keyName == null || "".equals(keyName))
         {
@@ -46,6 +47,8 @@ public class GetOAuthToken extends AbstractWebScript
         {
             try
             {
+                resp.setContentType(Format.JSON.mimetype());
+                resp.setContentEncoding("UTF-8");
                 // Start object
                 JSONWriter jsonObj = new JSONStringer().object();
                 // Add string values

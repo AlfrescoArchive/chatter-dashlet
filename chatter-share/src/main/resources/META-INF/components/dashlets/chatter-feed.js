@@ -167,32 +167,7 @@
          // Set up the new post link
          Event.addListener(this.id + "-newPost", "click", this.onNewPostClick, this, true);
          
-         // Try to find a ticket
-         // TODO make this a service?
-         var tokenName = "credentials_" + this.options.endpointId;
-         Alfresco.util.Ajax.jsonGet({
-            url: Alfresco.constants.PROXY_URI + "oauth/token/" + tokenName + "?name=" + tokenName,
-            successCallback: {
-               fn: function onReady_getToken_success(p_obj) {
-                  this.token = p_obj.json.accessToken;
-                  this.loadFeed();
-               },
-               scope: this
-            },
-            failureCallback: {
-               fn: function onReady_getToken_failure(p_obj) {
-                  if (p_obj.serverResponse.status == 404)
-                  {
-                      this.showConnect();
-                  }
-                  else
-                  {
-                     alert("An unknown error occurred while fetching the user ticket");
-                  }
-               },
-               scope: this
-            }
-         });
+         this.loadFeed();
           /*
          var me = this;
          

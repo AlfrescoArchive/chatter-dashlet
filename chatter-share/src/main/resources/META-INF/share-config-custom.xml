@@ -3,35 +3,16 @@
     <config evaluator="string-compare" condition="Remote">
       <remote>
         
-        <!--
-            OLD METHOD - Uses a custom connector to exchange the token for an access code. Subsequent requests are proxied
-            straight through, passing the token from the client. The connector connects back to the repo directly to store
-            the token (yuk), before returning to the client.
-        -->
-        
         <!-- Connector instances -->
-        <!-- 
-        <connector>
-            <id>chatter-oauth</id>
-            <name>Chatter OAuth 2.0 Connector</name>
-            <description>HTTP Connector with support for OAuth authentication</description>
-            <class>org.sharextras.webscripts.connector.HttpOAuth2Connector</class>
-            <client-id>3MVG9rFJvQRVOvk5W_CrNgQGmoMhFjPC9PwFpIjLhSg7NbTgFtylPj3On557sgBstlxXsG.Xr2wQqfNkdMfKy</client-id>
-            <client-secret>914216775528343297</client-secret>
-        </connector>
-        -->
         
         <!-- Endpoints -->
-        <!--
         <endpoint>
           <id>chatter-oauth</id>
-          <name>Chatter Authorization API (for obtaining an access token)</name>
-          <connector-id>chatter-oauth</connector-id>
-          <endpoint-url>https://login.salesforce.com</endpoint-url>
-          <access-token-path>/services/oauth2/token</access-token-path>
+          <name>Chatter REST API</name>
+          <connector-id>oauth2-header</connector-id>
+          <endpoint-url>https://eu2.salesforce.com</endpoint-url>
         </endpoint>
-        -->
-        
+            
         <!--
             NEW METHOD - Access token exchange is now performed by the OAuth2Return web script, which uses
             a credential store to persist the access token into the user's OAuth token store.

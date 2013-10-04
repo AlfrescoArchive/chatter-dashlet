@@ -48,7 +48,7 @@ public class SaveOAuthToken extends AbstractWebScript
             JSONObject reqJson = new JSONObject(new JSONTokener(jsonStr));
 
             String remoteSystem = reqJson.getString("name"), 
-                    accessToken = reqJson.getString("token"), 
+                    accessToken = reqJson.getString("accessToken"), 
                     refreshToken = reqJson.getString("refreshToken");
             
             if (logger.isDebugEnabled())
