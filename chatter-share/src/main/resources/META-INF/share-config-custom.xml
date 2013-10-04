@@ -1,9 +1,17 @@
 <alfresco-config>
 
     <config evaluator="string-compare" condition="Remote">
-      <remote>
+        <remote>
         
-        <!-- Connector instances -->
+            <!-- Connector instances -->
+            <connector>
+                <id>chatter-content</id>
+                <name>Chatter Query String Connector</name>
+                <description>HTTP Connector for loading static resources</description>
+                <class>org.sharextras.webscripts.connector.HttpOAuth2QueryStringConnector</class>
+                <identity>user</identity>
+                <token-source>chatter-oauth</token-source>
+            </connector>
         
         <!-- Endpoints -->
         <endpoint>
@@ -11,6 +19,12 @@
           <name>Chatter REST API</name>
           <connector-id>oauth2-header</connector-id>
           <endpoint-url>https://eu2.salesforce.com</endpoint-url>
+        </endpoint>
+        <endpoint>
+          <id>chatter-content</id>
+          <name>Chatter Content</name>
+          <connector-id>chatter-content</connector-id>
+          <endpoint-url>https://c.eu2.content.force.com</endpoint-url>
         </endpoint>
             
         <!--

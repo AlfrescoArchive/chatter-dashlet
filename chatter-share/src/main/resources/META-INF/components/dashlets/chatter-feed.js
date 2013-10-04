@@ -336,7 +336,7 @@
                   message = json.items[i];
                   u = message.actor;
                   profileUri = u ? u.url : null;
-                  mugshotUri = u && u.photo ? u.photo.smallPhotoUrl + "?oauth_token=" + this.token : null;
+                  mugshotUri = u && u.photo ? u.photo.smallPhotoUrl.replace("https://c.eu2.content.force.com/", "http://localhost:8081/share/proxy/chatter-content/") : null;
                   uname = u ? u.name : null;
                   userLink = "<a href=\"" + this._webUrl(profileUri) + "\" title=\"" + $html(uname) + "\" class=\"theme-color-1\">" + $html(uname) + "</a>";
                   html += "<div class=\"chatter-item detail-list-item\">" + "<div class=\"chatter-item-hd\">" + 
