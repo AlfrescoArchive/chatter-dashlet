@@ -2,8 +2,8 @@
 
     <config evaluator="string-compare" condition="Remote">
         <remote>
-        
-            <!-- Connector instances -->
+
+            <!-- Connectors -->
             <connector>
                 <id>chatter-content</id>
                 <name>Chatter Query String Connector</name>
@@ -12,65 +12,51 @@
                 <identity>user</identity>
                 <token-source>chatter-oauth</token-source>
             </connector>
-        
-        <!-- Endpoints -->
-        <endpoint>
-          <id>chatter-oauth</id>
-          <name>Chatter REST API</name>
-          <connector-id>oauth2-header</connector-id>
-          <endpoint-url>https://eu2.salesforce.com</endpoint-url>
-          <client-id>3MVG9rFJvQRVOvk5W_CrNgQGmoMhFjPC9PwFpIjLhSg7NbTgFtylPj3On557sgBstlxXsG.Xr2wQqfNkdMfKy</client-id>
-          <client-secret>914216775528343297</client-secret>
-          <access-token-url>http://login.salesforce.com/services/oauth2/token</access-token-url>
-        </endpoint>
-        <endpoint>
-          <id>chatter-content</id>
-          <name>Chatter Content</name>
-          <connector-id>chatter-content</connector-id>
-          <endpoint-url>https://c.eu2.content.force.com</endpoint-url>
-        </endpoint>
-            
-        <!--
-            NEW METHOD - Access token exchange is now performed by the OAuth2Return web script, which uses
-            a credential store to persist the access token into the user's OAuth token store.
-            
-            Still requires that the client code provides a X-OAuth-Token header value with each request.
-            
-            TODO Provide an authenticator which will look up the tokens from the store and add to the request.
-        -->
-        <endpoint>
-          <id>chatter</id>
-          <name>Chatter REST API</name>
-          <connector-id>oauth-token-passthru</connector-id>
-          <endpoint-url>https://eu2.salesforce.com</endpoint-url>
-        </endpoint>
-        
-      </remote>
+
+            <!-- Endpoints -->
+            <endpoint>
+              <id>chatter-oauth</id>
+              <name>Chatter REST API</name>
+              <connector-id>oauth2-header</connector-id>
+              <endpoint-url>https://eu2.salesforce.com</endpoint-url>
+              <client-id>3MVG9rFJvQRVOvk5W_CrNgQGmoMhFjPC9PwFpIjLhSg7NbTgFtylPj3On557sgBstlxXsG.Xr2wQqfNkdMfKy</client-id>
+              <client-secret>914216775528343297</client-secret>
+              <access-token-url>http://login.salesforce.com/services/oauth2/token</access-token-url>
+            </endpoint>
+
+            <endpoint>
+              <id>chatter-content</id>
+              <name>Chatter Content</name>
+              <connector-id>chatter-content</connector-id>
+              <endpoint-url>https://c.eu2.content.force.com</endpoint-url>
+            </endpoint>
+
+        </remote>
     </config>
    
-   <config evaluator="string-compare" condition="DocLibCustom">   
-      <dependencies>
-         <js src="/components/documentlibrary/actions/chatter-actions.js" />   
-      </dependencies> 
-   </config>
+    <config evaluator="string-compare" condition="DocLibCustom">   
+        <dependencies>
+            <js src="/components/documentlibrary/actions/chatter-actions.js" />   
+        </dependencies> 
+    </config>
     
     <config evaluator="string-compare" condition="DocLibActions">
-      <actions>
-         <action id="document-post-to-chatter" type="javascript" label="actions.post-to-chatter" icon="salesforce-chatter">
-            <param name="function">onActionPostToChatter</param>
-         </action>
-      </actions>
-   </config>
+        <actions>
+            <action id="document-post-to-chatter" type="javascript" label="actions.post-to-chatter" icon="salesforce-chatter">
+                <param name="function">onActionPostToChatter</param>
+            </action>
+        </actions>
+    </config>
    
-   <config evaluator="string-compare" condition="DocLibActions">
-      <actionGroups>
-         <actionGroup id="document-browse">
-            <action index="999" id="document-post-to-chatter" />
-         </actionGroup>
-         <actionGroup id="document-details">
-            <action index="999" id="document-post-to-chatter" />
-         </actionGroup>
-      </actionGroups>
-   </config>
-   
+    <config evaluator="string-compare" condition="DocLibActions">
+        <actionGroups>
+            <actionGroup id="document-browse">
+                <action index="999" id="document-post-to-chatter" />
+            </actionGroup>
+            <actionGroup id="document-details">
+                <action index="999" id="document-post-to-chatter" />
+            </actionGroup>
+        </actionGroups>
+    </config>
+
 </alfresco-config>
