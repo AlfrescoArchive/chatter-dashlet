@@ -5,16 +5,6 @@
         
             <!-- Connector instances -->
             <connector>
-                <id>chatter-api</id>
-                <name>Chatter Query String Connector</name>
-                <description>HTTP Connector for loading static resources</description>
-                <class>org.sharextras.webscripts.connector.HttpOAuth2Connector</class>
-                <identity>user</identity>
-                <client-id>3MVG9rFJvQRVOvk5W_CrNgQGmoMhFjPC9PwFpIjLhSg7NbTgFtylPj3On557sgBstlxXsG.Xr2wQqfNkdMfKy</client-id>
-                <client-secret>914216775528343297</client-secret>
-                <access-token-url>http://login.salesforce.com/services/oauth2/token</access-token-url>
-            </connector>
-            <connector>
                 <id>chatter-content</id>
                 <name>Chatter Query String Connector</name>
                 <description>HTTP Connector for loading static resources</description>
@@ -27,8 +17,11 @@
         <endpoint>
           <id>chatter-oauth</id>
           <name>Chatter REST API</name>
-          <connector-id>chatter-api</connector-id>
+          <connector-id>oauth2-header</connector-id>
           <endpoint-url>https://eu2.salesforce.com</endpoint-url>
+          <client-id>3MVG9rFJvQRVOvk5W_CrNgQGmoMhFjPC9PwFpIjLhSg7NbTgFtylPj3On557sgBstlxXsG.Xr2wQqfNkdMfKy</client-id>
+          <client-secret>914216775528343297</client-secret>
+          <access-token-url>http://login.salesforce.com/services/oauth2/token</access-token-url>
         </endpoint>
         <endpoint>
           <id>chatter-content</id>

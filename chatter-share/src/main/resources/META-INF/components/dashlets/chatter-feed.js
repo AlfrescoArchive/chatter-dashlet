@@ -99,19 +99,19 @@
           * 
           * @property endpointId
           * @type string
-          * @default "chatter"
+          * @default ""
           */
-         endpointId: "chatter-oauth",
+         endpointId: "",
          
          /**
           * URI of the provider's authorization page. If an access token does not already exist then the
           * user will be sent here in order to obtain one.
           * 
-          * @property loginUrl
+          * @property authorizationUrl
           * @type string
-          * @default "https://login.salesforce.com/services/oauth2/authorize"
+          * @default ""
           */
-         loginUrl: "https://login.salesforce.com/services/oauth2/authorize",
+         authorizationUrl: "",
          
          /**
           * OAuth client (application) ID
@@ -769,7 +769,7 @@
                Alfresco.constants.URL_PAGECONTEXT + this.options.returnPage + "/" + encodeURIComponent(this.options.endpointId),
             pageUrl = window.location.pathname.replace(Alfresco.constants.URL_CONTEXT, ""),
             state = "rp=" + encodeURIComponent(pageUrl),
-            authUri = this.options.loginUrl + 
+            authUri = this.options.authorizationUrl + 
                "?response_type=code&client_id=" + 
                this.options.clientId + "&redirect_uri=" +
                encodeURIComponent(returnUrl) + "&state=" + 

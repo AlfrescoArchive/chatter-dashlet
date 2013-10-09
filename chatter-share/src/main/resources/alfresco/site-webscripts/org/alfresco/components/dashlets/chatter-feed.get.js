@@ -1,5 +1,8 @@
 function main()
 {
+   var endpointId = "chatter-oauth",
+      connector = remote.connect(endpointId);
+
    var dashletResizer = {
       id : "DashletResizer",
       name : "Alfresco.widget.DashletResizer",
@@ -29,8 +32,10 @@ function main()
       id : "ChatterDashlet",
       name : "Alfresco.dashlet.ChatterFeed",
       options: {
-         // TODO Need to get these values from the web tier config (same source as used by connector)
-         clientId: "3MVG9rFJvQRVOvk5W_CrNgQGmoMhFjPC9PwFpIjLhSg7NbTgFtylPj3On557sgBstlxXsG.Xr2wQqfNkdMfKy"
+         endpointId: endpointId,
+         clientId: connector != null ? connector.getDescriptor().getStringProperty("client-id") : "",
+         authorizationUrl: "https://login.salesforce.com/services/oauth2/authorize",
+         baseUrl: "https://eu2.salesforce.com"
       }
    };
    
