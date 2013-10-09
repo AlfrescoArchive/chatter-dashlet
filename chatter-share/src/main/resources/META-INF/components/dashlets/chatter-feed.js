@@ -109,9 +109,9 @@
           * 
           * @property loginUrl
           * @type string
-          * @default "https://login.salesforce.com"
+          * @default "https://login.salesforce.com/services/oauth2/authorize"
           */
-         loginUrl: "https://login.salesforce.com",
+         loginUrl: "https://login.salesforce.com/services/oauth2/authorize",
          
          /**
           * OAuth client (application) ID
@@ -278,9 +278,12 @@
        */
       _request: function ChatterFeed__request(config)
       {
-          // Token will be copied to Authorization header by the connector
-          // We cannot set the Authorization header directly because Share's proxy doesn't like it
-          YAHOO.util.Connect.initHeader("X-OAuth-Token", "OAuth " + this.token); 
+          if (this.token)
+          {
+              // Token will be copied to Authorization header by the connector
+              // We cannot set the Authorization header directly because Share's proxy doesn't like it
+              YAHOO.util.Connect.initHeader("X-OAuth-Token", "OAuth " + this.token); 
+          }
           Alfresco.util.Ajax.jsonRequest({
               url: config.url,
               method: config.method || "GET",
@@ -289,7 +292,10 @@
               failureCallback: config.failureCallback,
               noReloadOnAuthFailure: true
           });
-          YAHOO.util.Connect.resetDefaultHeaders();
+          if (this.token)
+          {
+              YAHOO.util.Connect.resetDefaultHeaders();
+          }
       },
       
       /**
@@ -764,7 +770,7 @@
             pageUrl = window.location.pathname.replace(Alfresco.constants.URL_CONTEXT, ""),
             state = "rp=" + encodeURIComponent(pageUrl),
             authUri = this.options.loginUrl + 
-               "/services/oauth2/authorize?response_type=code&client_id=" + 
+               "?response_type=code&client_id=" + 
                this.options.clientId + "&redirect_uri=" +
                encodeURIComponent(returnUrl) + "&state=" + 
                encodeURIComponent(state);
