@@ -1,5 +1,0 @@
-<webscript>
-    <shortname>Chatter OAuth return</shortname>
-    <description>Receive a verification code back from the Chatter OAuth service, swap it for an access token, store this and redirect the user</description>
-    <url>/integrations/salesforce/chatter-return</url>
-</webscript>

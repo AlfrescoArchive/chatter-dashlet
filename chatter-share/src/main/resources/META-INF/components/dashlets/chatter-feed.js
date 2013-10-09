@@ -126,14 +126,14 @@
          
          /**
           * URL of the web script (minus the leading slash) to be used as the return landing page after
-          * authorization has taken place. The script must exhange the temporary code for an access
+          * authorization has taken place. The script must exchange the temporary code for an access
           * token and persist it to the repository.
           * 
           * @property returnPage
           * @type string
-          * @default "integrations/salesforce/chatter-return"
+          * @default "extras/oauth/auth2-return"
           */
-         returnPage: "integrations/salesforce/chatter-return",
+         returnPage: "extras/oauth/auth2-return",
          
          baseUrl: "https://eu2.salesforce.com"
       },
@@ -766,7 +766,7 @@
          // since it seems URL parameters specified on the return URL are not preserved.
           
          var returnUrl = window.location.protocol + "//" + window.location.host + 
-               Alfresco.constants.URL_PAGECONTEXT + this.options.returnPage,
+               Alfresco.constants.URL_PAGECONTEXT + this.options.returnPage + "/" + encodeURIComponent(this.options.endpointId),
             pageUrl = window.location.pathname.replace(Alfresco.constants.URL_CONTEXT, ""),
             state = "rp=" + encodeURIComponent(pageUrl),
             authUri = this.options.loginUrl + 

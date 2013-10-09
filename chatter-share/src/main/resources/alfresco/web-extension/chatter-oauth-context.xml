@@ -3,13 +3,6 @@
 
 <beans>
     
-    <bean id="webscript.org.alfresco.integrations.salesforce.chatter-oauth2-return.get" parent="webscript.org.sharextras.slingshot.oauth2-return.get">
-        <property name="endpointId" value="chatter-oauth" />
-        <property name="clientId" value="3MVG9rFJvQRVOvk5W_CrNgQGmoMhFjPC9PwFpIjLhSg7NbTgFtylPj3On557sgBstlxXsG.Xr2wQqfNkdMfKy" />
-        <property name="clientSecret" value="914216775528343297" />
-        <property name="accessTokenUrl" value ="http://login.salesforce.com/services/oauth2/token" />
-    </bean>
-    
    <!-- Custom WebScript Messages - add slingshot application messages -->
    <bean id="webscripts.resources.chatter-action" class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
       <property name="resourceBundles">
