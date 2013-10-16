@@ -104,6 +104,15 @@
          endpointId: "",
          
          /**
+          * Name of the endpoint to be used to proxy connections to static resources, e.g. profile images
+          * 
+          * @property contentEndpointId
+          * @type string
+          * @default ""
+          */
+         contentEndpointId: "",
+         
+         /**
           * URI of the provider's authorization page. If an access token does not already exist then the
           * user will be sent here in order to obtain one.
           * 
@@ -112,6 +121,15 @@
           * @default ""
           */
          authorizationUrl: "",
+         
+         /**
+          * Space-separated list of scopes to be requested
+          * 
+          * @property scopes
+          * @type string
+          * @default "chatter_api refresh_token"
+          */
+         scopes: "chatter_api refresh_token",
          
          /**
           * OAuth client (application) ID
@@ -342,7 +360,7 @@
                   message = json.items[i];
                   u = message.actor;
                   profileUri = u ? u.url : null;
-                  mugshotUri = u && u.photo ? u.photo.smallPhotoUrl.replace("https://c.eu2.content.force.com/", "http://localhost:8081/share/proxy/chatter-content/") : null;
+                  mugshotUri = u && u.photo ? u.photo.smallPhotoUrl.replace(/https:\/\/[\w\-\.]+\.content\.force\.com\//, Alfresco.constants.PROXY_URI.replace("/alfresco/", "/" + this.options.contentEndpointId +"/")) : null;
                   uname = u ? u.name : null;
                   userLink = "<a href=\"" + this._webUrl(profileUri) + "\" title=\"" + $html(uname) + "\" class=\"theme-color-1\">" + $html(uname) + "</a>";
                   html += "<div class=\"chatter-item detail-list-item\">" + "<div class=\"chatter-item-hd\">" + 
@@ -772,7 +790,8 @@
             authUri = this.options.authorizationUrl + 
                "?response_type=code&client_id=" + 
                this.options.clientId + "&redirect_uri=" +
-               encodeURIComponent(returnUrl) + "&state=" + 
+               encodeURIComponent(returnUrl) + "&scope=" + 
+               encodeURIComponent(this.options.scopes) + "&state=" + 
                encodeURIComponent(state);
          
          window.location = authUri;

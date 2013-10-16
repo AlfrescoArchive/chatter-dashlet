@@ -1,6 +1,7 @@
 function main()
 {
    var endpointId = "chatter-oauth",
+      contentEndpointId = "chatter-content",
       connector = remote.connect(endpointId);
 
    var dashletResizer = {
@@ -33,6 +34,7 @@ function main()
       name : "Alfresco.dashlet.ChatterFeed",
       options: {
          endpointId: endpointId,
+         contentEndpointId: contentEndpointId,
          clientId: connector != null ? connector.getDescriptor().getStringProperty("client-id") : "",
          authorizationUrl: "https://login.salesforce.com/services/oauth2/authorize",
          baseUrl: "https://eu2.salesforce.com"
