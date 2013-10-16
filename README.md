@@ -21,15 +21,12 @@ To build using Maven
 	cd chatter-dashlet
     mvn clean package
     
-The build will produce two separate artitacts which must be installed into your installation
-
-  * a JAR file under `chatter-share/target` which should be added to the `WEB-INF/lib` folder inside the Share webapp
-  * an AMP file under `chatter-repo/target` which should be installed into the repository webapp via the Module Management Tool
+The build will produce a JAR file `chatter-share/target` which should be copied either to the `WEB-INF/lib` folder inside the Share webapp (by default `tomcat/webapps/share`) or to the `tomcat/shared/lib` directory if this is enabled.
 
 TODO
 ----
 
-* Move repo-tier components into the Share OAuth project
 * Improvements to Maven build to use Maven SDK and depend on Share OAuth
-* Request refresh tokens from Salesforce, so that expired access tokens can be renewed
-* Improvements to Share OAuth to avoid having to load access tokens in client-side code
+* <strike>Request refresh tokens from Salesforce, so that expired access tokens can be renewed</strike>
+* <strike>Move repo-tier components into the Share OAuth project</strike>
+* <strike>Improvements to Share OAuth to avoid having to load access tokens in client-side code</strike>
