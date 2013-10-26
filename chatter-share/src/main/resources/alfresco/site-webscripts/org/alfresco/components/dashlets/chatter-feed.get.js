@@ -1,8 +1,12 @@
 function main()
 {
-   var endpointId = "chatter-oauth",
+   var endpointId = "chatter-api",
       contentEndpointId = "chatter-content",
-      connector = remote.connect(endpointId);
+      authEndpointId = "chatter-auth",
+      webEndpointId = "chatter-web",
+      endpoint = remote.connect(endpointId),
+      authEndpoint = remote.connect(authEndpointId),
+      webEndpoint = remote.connect(webEndpointId);
 
    var dashletResizer = {
       id : "DashletResizer",
@@ -35,9 +39,9 @@ function main()
       options: {
          endpointId: endpointId,
          contentEndpointId: contentEndpointId,
-         clientId: connector != null ? connector.getDescriptor().getStringProperty("client-id") : "",
-         authorizationUrl: "https://login.salesforce.com/services/oauth2/authorize",
-         baseUrl: "https://eu2.salesforce.com"
+         clientId: endpoint != null ? endpoint.getDescriptor().getStringProperty("client-id") : "",
+         authorizationUrl: authEndpoint != null ? authEndpoint.getDescriptor().getEndpointUrl() : "",
+         baseUrl: webEndpoint != null ? webEndpoint.getDescriptor().getEndpointUrl() : ""
       }
    };
    

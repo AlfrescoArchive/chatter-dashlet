@@ -15,13 +15,13 @@
 
             <!-- Endpoints -->
             <endpoint>
-              <id>chatter-oauth</id>
+              <id>chatter-api</id>
               <name>Chatter REST API</name>
               <connector-id>oauth2-header</connector-id>
               <endpoint-url>https://eu2.salesforce.com</endpoint-url>
               <client-id>3MVG9rFJvQRVOvk5W_CrNgQGmoMhFjPC9PwFpIjLhSg7NbTgFtylPj3On557sgBstlxXsG.Xr2wQqfNkdMfKy</client-id>
               <client-secret>914216775528343297</client-secret>
-              <access-token-url>http://login.salesforce.com/services/oauth2/token</access-token-url>
+              <access-token-url>https://login.salesforce.com/services/oauth2/token</access-token-url>
             </endpoint>
 
             <endpoint>
@@ -29,6 +29,18 @@
               <name>Chatter Content</name>
               <connector-id>chatter-content</connector-id>
               <endpoint-url>https://c.eu2.content.force.com</endpoint-url>
+            </endpoint>
+
+            <endpoint>
+              <id>chatter-auth</id>
+              <name>Chatter Authorization Endpoint</name>
+              <endpoint-url>https://login.salesforce.com/services/oauth2/authorize</endpoint-url>
+            </endpoint>
+
+            <endpoint>
+              <id>chatter-web</id>
+              <name>Chatter Web Endpoint</name>
+              <endpoint-url>https://eu2.salesforce.com</endpoint-url>
             </endpoint>
 
         </remote>
