@@ -10,7 +10,7 @@
                 <description>HTTP Connector for loading static resources</description>
                 <class>org.sharextras.webscripts.connector.HttpOAuth2QueryStringConnector</class>
                 <identity>user</identity>
-                <token-source>chatter-oauth</token-source>
+                <token-source>chatter-api</token-source>
             </connector>
 
             <!-- Endpoints -->
@@ -35,12 +35,14 @@
               <id>chatter-auth</id>
               <name>Chatter Authorization Endpoint</name>
               <endpoint-url>https://login.salesforce.com/services/oauth2/authorize</endpoint-url>
+              <connector-id>http</connector-id>
             </endpoint>
 
             <endpoint>
               <id>chatter-web</id>
               <name>Chatter Web Endpoint</name>
               <endpoint-url>https://eu2.salesforce.com</endpoint-url>
+              <connector-id>http</connector-id>
             </endpoint>
 
         </remote>
