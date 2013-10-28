@@ -1,38 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.alfresco.integrations</groupId>
 	<artifactId>chatterIntegration</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0-SNAPSHOT</version>
-	<name>chatterIntegration project</name>
-	<url>http://share.alfresco.com</url>
-	<!-- New Alfresco Maven Community Repository instance, pro -->
-	<repositories>
-		<repository>
-			<id>alfresco-public</id>
-			<url>http://maven.alfresco.com/nexus/content/groups/public</url>
-		</repository>
-		<repository>
-			<id>alfresco-public-snapshots</id>
-			<url>http://maven.alfresco.com/nexus/content/groups/public-snapshots</url>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>daily</updatePolicy>
-			</snapshots>
-		</repository>
-	</repositories>
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- Spring Surf dependencies are available via proxy via maven.alfresco.com so just add them below -->
-	</dependencies>
+	<name>Chatter Integration</name>
+
+    <parent>
+        <groupId>org.alfresco.integrations</groupId>
+        <artifactId>chatterIntegration-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
     <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
         <plugins>
              <!-- Needed for cross OS compatibility in acp/zip encoding -->
             <plugin>
@@ -51,15 +34,23 @@
                 </configuration>
             </plugin>
             <plugin>
-                 <groupId>org.alfresco.maven.plugin</groupId>
-                 <artifactId>maven-amp-plugin</artifactId>
-                 <version>3.0.4</version>
-                 <extensions>true</extensions>
-                 <configuration>
-                     <archive>
-                         <addMavenDescriptor>false</addMavenDescriptor>
-                     </archive>
-                 </configuration>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>yuicompressor-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>compressyui</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>compress</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*.css</exclude>
+                        <exclude>**/*.get.js</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
