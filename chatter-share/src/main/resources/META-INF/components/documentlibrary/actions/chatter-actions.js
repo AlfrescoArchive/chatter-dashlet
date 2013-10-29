@@ -38,7 +38,7 @@
              callback:
              {
                  fn: function Chatter_onNewPostClick_postCB(value, obj) {
-                     if (value != null && value != "")
+                     if (value !== null && value !== "")
                      {
                          var dataObj = {
                              body: {
@@ -62,7 +62,7 @@
                              dataObj: dataObj,
                              successCallback: {
                                  fn: function(o) {
-                                     if (o.responseText == "")
+                                     if (o.responseText === "")
                                      {
                                          throw new Error("Received empty response");
                                      }

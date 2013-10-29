@@ -39,9 +39,9 @@ function main()
       options: {
          endpointId: endpointId,
          contentEndpointId: contentEndpointId,
-         clientId: endpoint != null ? endpoint.getDescriptor().getStringProperty("client-id") : "",
-         authorizationUrl: authEndpoint != null ? authEndpoint.getDescriptor().getEndpointUrl() : "",
-         baseUrl: webEndpoint != null ? webEndpoint.getDescriptor().getEndpointUrl() : ""
+         clientId: endpoint !== null ? endpoint.getDescriptor().getStringProperty("client-id") : "",
+         authorizationUrl: authEndpoint !== null ? authEndpoint.getDescriptor().getEndpointUrl() : "",
+         baseUrl: webEndpoint !== null ? webEndpoint.getDescriptor().getEndpointUrl() : ""
       }
    };
    

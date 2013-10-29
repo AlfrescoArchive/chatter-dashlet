@@ -692,7 +692,7 @@
              callback:
              {
                  fn: function Chatter_onNewPostClick_postCB(value, obj) {
-                     if (value != null && value != "")
+                     if (value !== null && value !== "")
                      {
                          var dataObj = {
                              body: {
@@ -714,7 +714,7 @@
                              //requestContentType: Alfresco.util.Ajax.FORM,
                              successCallback: {
                                  fn: function(o) {
-                                     if (o.responseText == "")
+                                     if (o.responseText === "")
                                      {
                                          Alfresco.util.PopupManager.displayMessage({
                                              text: this.msg("error.post-empty-resp")
