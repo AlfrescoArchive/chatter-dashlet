@@ -38,19 +38,75 @@
                 <artifactId>yuicompressor-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>compressyui</id>
-                        <phase>process-resources</phase>
+                        <id>yui-compress</id>
                         <goals>
                             <goal>compress</goal>
                         </goals>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/*.css</exclude>
+                                <exclude>**/*.get.js</exclude>
+                            </excludes>
+                            <jswarn>false</jswarn>
+                            <failOnWarning>false</failOnWarning>
+                        </configuration>
+                    </execution>
+                    <!--
+                        yuicompressor-maven-plugin:jslint
+                        does not like backslash-escaped double quote marks in string literals enclosed 
+                        by double quotes
+                    -->
+                    <!--
+                    <execution>
+                        <id>yui-jslint</id>
+                        <goals>
+                            <goal>jslint</goal>
+                        </goals>
+                        <configuration>
+                            <jswarn>true</jswarn>
+                            <failOnWarning>true</failOnWarning>
+                        </configuration>
+                    </execution>
+                    -->
+                </executions>
+            </plugin>
+            <!--
+                jslint-maven-plugin:jslint
+                suffers from general jslint problems - way too fussy by default and a pain to configure
+            -->
+            <!--
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jslint-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>jslint</goal>
+                        </goals>
+                        <phase>process-resources</phase>
                     </execution>
                 </executions>
                 <configuration>
-                    <excludes>
-                        <exclude>**/*.css</exclude>
-                        <exclude>**/*.get.js</exclude>
-                    </excludes>
+                    <sourceJsFolder>src/main/resources</sourceJsFolder>
+                    <predefinedVars>Alfresco, YAHOO, args, instance, remote, model, msg, window</predefinedVars>
+                    <assumeABrowser>true</assumeABrowser>
                 </configuration>
+            </plugin>
+            -->
+            <!--
+                jshint-maven-plugin:lint
+                works well out-of-the-box
+            -->
+            <plugin>
+                <groupId>com.cj.jshintmojo</groupId>
+                <artifactId>jshint-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>lint</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
