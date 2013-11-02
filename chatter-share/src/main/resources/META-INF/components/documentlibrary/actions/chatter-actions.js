@@ -16,7 +16,7 @@
       {
          var nodeRef = new Alfresco.util.NodeRef(record.nodeRef),
              documentName = record.displayName,
-             documentUrl = window.location.href.substring(0, window.location.href.lastIndexOf("/")) + "/document-details?nodeRef=" + nodeRef.nodeRef;
+             documentUrl = Alfresco.util.siteURL("document-details?nodeRef=" + nodeRef.nodeRef, {}, true);
 
          var token, _request = function ChatterFeed__request(config)
          {
